@@ -5,7 +5,7 @@ pipeline {
         DOCKER_CREDENTIALS_ID = 'docker-credentials' // Replace with your Docker credentials ID in Jenkins
         REPO_URL = 'https://github.com/Elshaama/3-tier-app.git' // Replace with your Git repository URL
         BRANCH = 'main' // Replace with your branch name
-    }   
+    }
 
     stages {
         stage('Checkout Code') {
@@ -20,7 +20,7 @@ pipeline {
                     steps {
                         script {
                             dir('backend-flask') {
-                            sh 'docker build -t backend-image:latest .'
+                                sh 'docker build -t backend-image:latest .'
                             }   
                         }
                     }
@@ -29,12 +29,20 @@ pipeline {
                     steps {
                         script {
                             dir('frontend-html') {
-                            sh 'docker build -t frontend-image:latest .'
+                                sh 'docker build -t frontend-image:latest .'
                             }   
                         }
                     }
                 }
-                
+                stage('Build Database Image') {
+                    steps {
+                        script {
+                            dir('database') { // Adjust the directory if needed
+                                sh 'docker build -t database-image:latest .'
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -44,8 +52,8 @@ pipeline {
                     steps {
                         script {
                             withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
-                                sh 'docker tag backend-image:latest ${env.DOCKER_REGISTRY}/backend-image:latest'
-                                sh 'docker push ${env.DOCKER_REGISTRY}/backend-image:latest'
+                                sh 'docker tag backend-image:latest docker.io/elshaama/backend-image:latest'
+                                sh 'docker push docker.io/elshaama/backend-image:latest'
                             }
                         }
                     }
@@ -54,8 +62,8 @@ pipeline {
                     steps {
                         script {
                             withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
-                                sh 'docker tag frontend-image:latest ${env.DOCKER_REGISTRY}/frontend-image:latest'
-                                sh 'docker push ${env.DOCKER_REGISTRY}/frontend-image:latest'
+                                sh 'docker tag frontend-image:latest docker.io/elshaama/frontend-image:latest'
+                                sh 'docker push docker.io/elshaama/frontend-image:latest'
                             }
                         }
                     }
@@ -64,8 +72,8 @@ pipeline {
                     steps {
                         script {
                             withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
-                                sh 'docker tag database-image:latest ${env.DOCKER_REGISTRY}/database-image:latest'
-                                sh 'docker push ${env.DOCKER_REGISTRY}/database-image:latest'
+                                sh 'docker tag database-image:latest docker.io/elshaama/database-image:latest'
+                                sh 'docker push docker.io/elshaama/database-image:latest'
                             }
                         }
                     }
