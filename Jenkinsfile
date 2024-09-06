@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_REGISTRY = 'Elshaama' // Replace with your Docker registry URL
+        DOCKER_REGISTRY = 'https://index.docker.io/v1/' // Replace with your Docker registry URL
         DOCKER_CREDENTIALS_ID = 'docker-credentials' // Replace with your Docker credentials ID in Jenkins
         REPO_URL = 'https://github.com/Elshaama/3-tier-app.git' // Replace with your Git repository URL
         BRANCH = 'main' // Replace with your branch name
