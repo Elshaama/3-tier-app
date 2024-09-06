@@ -38,7 +38,7 @@ pipeline {
                     steps {
                         script {
                             dir('database-mysql') { // Adjust the directory if needed
-                                sh 'docker-compose build -t database-image:latest .'
+                                sh 'docker-compose build'
                             }
                         }
                     }
