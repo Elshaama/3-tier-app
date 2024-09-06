@@ -5,7 +5,7 @@ pipeline {
         DOCKER_CREDENTIALS_ID = 'docker-credentials' // Replace with your Docker credentials ID in Jenkins
         REPO_URL = 'https://github.com/Elshaama/3-tier-app.git' // Replace with your Git repository URL
         BRANCH = 'main' // Replace with your branch name
-        DOCKER_REGISTRY_URL = 'docker.io' // Docker registry URL
+        DOCKER_REGISTRY_URL = 'https://index.docker.io/v1/' // Updated to include the protocol and URL path
     }
 
     stages {
