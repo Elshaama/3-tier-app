@@ -2,11 +2,10 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_REGISTRY = 'https://index.docker.io/v1/' // Replace with your Docker registry URL
         DOCKER_CREDENTIALS_ID = 'docker-credentials' // Replace with your Docker credentials ID in Jenkins
         REPO_URL = 'https://github.com/Elshaama/3-tier-app.git' // Replace with your Git repository URL
         BRANCH = 'main' // Replace with your branch name
-    }
+    }   
 
     stages {
         stage('Checkout Code') {
@@ -44,7 +43,7 @@ pipeline {
                 stage('Push Backend Image') {
                     steps {
                         script {
-                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_REGISTRY}"]) {
+                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
                                 sh 'docker tag backend-image:latest ${env.DOCKER_REGISTRY}/backend-image:latest'
                                 sh 'docker push ${env.DOCKER_REGISTRY}/backend-image:latest'
                             }
@@ -54,7 +53,7 @@ pipeline {
                 stage('Push Frontend Image') {
                     steps {
                         script {
-                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_REGISTRY}"]) {
+                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
                                 sh 'docker tag frontend-image:latest ${env.DOCKER_REGISTRY}/frontend-image:latest'
                                 sh 'docker push ${env.DOCKER_REGISTRY}/frontend-image:latest'
                             }
@@ -64,7 +63,7 @@ pipeline {
                 stage('Push Database Image') {
                     steps {
                         script {
-                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_REGISTRY}"]) {
+                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
                                 sh 'docker tag database-image:latest ${env.DOCKER_REGISTRY}/database-image:latest'
                                 sh 'docker push ${env.DOCKER_REGISTRY}/database-image:latest'
                             }
