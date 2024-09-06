@@ -5,6 +5,7 @@ pipeline {
         DOCKER_CREDENTIALS_ID = 'docker-credentials' // Replace with your Docker credentials ID in Jenkins
         REPO_URL = 'https://github.com/Elshaama/3-tier-app.git' // Replace with your Git repository URL
         BRANCH = 'main' // Replace with your branch name
+        DOCKER_REGISTRY_URL = 'docker.io' // Docker registry URL
     }
 
     stages {
@@ -21,7 +22,7 @@ pipeline {
                         script {
                             dir('backend-flask') {
                                 sh 'docker build -t backend-image:latest .'
-                            }   
+                            }
                         }
                     }
                 }
@@ -30,14 +31,14 @@ pipeline {
                         script {
                             dir('frontend-html') {
                                 sh 'docker build -t frontend-image:latest .'
-                            }   
+                            }
                         }
                     }
                 }
                 stage('Build Database Image') {
                     steps {
                         script {
-                            dir('database-mysql') { // Adjust the directory if needed
+                            dir('database-mysql') {
                                 sh 'docker-compose build'
                             }
                         }
@@ -51,9 +52,9 @@ pipeline {
                 stage('Push Backend Image') {
                     steps {
                         script {
-                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
-                                sh 'docker tag backend-image:latest docker.io/elshaama/backend-image:latest'
-                                sh 'docker push docker.io/elshaama/backend-image:latest'
+                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_REGISTRY_URL}"]) {
+                                sh 'docker tag backend-image:latest ${env.DOCKER_REGISTRY_URL}/elshaama/backend-image:latest'
+                                sh 'docker push ${env.DOCKER_REGISTRY_URL}/elshaama/backend-image:latest'
                             }
                         }
                     }
@@ -61,9 +62,9 @@ pipeline {
                 stage('Push Frontend Image') {
                     steps {
                         script {
-                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
-                                sh 'docker tag frontend-image:latest docker.io/elshaama/frontend-image:latest'
-                                sh 'docker push docker.io/elshaama/frontend-image:latest'
+                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_REGISTRY_URL}"]) {
+                                sh 'docker tag frontend-image:latest ${env.DOCKER_REGISTRY_URL}/elshaama/frontend-image:latest'
+                                sh 'docker push ${env.DOCKER_REGISTRY_URL}/elshaama/frontend-image:latest'
                             }
                         }
                     }
@@ -71,9 +72,9 @@ pipeline {
                 stage('Push Database Image') {
                     steps {
                         script {
-                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
-                                sh 'docker tag database-image:latest docker.io/elshaama/database-image:latest'
-                                sh 'docker push docker.io/elshaama/database-image:latest'
+                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_REGISTRY_URL}"]) {
+                                sh 'docker tag database-image:latest ${env.DOCKER_REGISTRY_URL}/elshaama/database-image:latest'
+                                sh 'docker push ${env.DOCKER_REGISTRY_URL}/elshaama/database-image:latest'
                             }
                         }
                     }
@@ -84,7 +85,9 @@ pipeline {
         stage('Deploy with Docker Compose') {
             steps {
                 script {
-                    sh 'docker-compose -f docker-compose.yml up -d'
+                    dir('database-mysql') { // Ensure this directory is correct
+                        sh 'docker-compose -f docker-compose.yml up -d'
+                    }
                 }
             }
         }
