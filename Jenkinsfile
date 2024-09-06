@@ -43,7 +43,8 @@ pipeline {
                 stage('Push Backend Image') {
                     steps {
                         script {
-                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
+                            withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                                sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD https://index.docker.io/v1/'
                                 sh 'docker tag backend-image:latest ${env.DOCKER_HUB_REPO}/backend-image:latest'
                                 sh 'docker push ${env.DOCKER_HUB_REPO}/backend-image:latest'
                             }
@@ -53,7 +54,8 @@ pipeline {
                 stage('Push Frontend Image') {
                     steps {
                         script {
-                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
+                            withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                                sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD https://index.docker.io/v1/'
                                 sh 'docker tag frontend-image:latest ${env.DOCKER_HUB_REPO}/frontend-image:latest'
                                 sh 'docker push ${env.DOCKER_HUB_REPO}/frontend-image:latest'
                             }
@@ -63,7 +65,8 @@ pipeline {
                 stage('Push Database Image') {
                     steps {
                         script {
-                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
+                            withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                                sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD https://index.docker.io/v1/'
                                 sh 'docker tag database-image:latest ${env.DOCKER_HUB_REPO}/database-image:latest'
                                 sh 'docker push ${env.DOCKER_HUB_REPO}/database-image:latest'
                             }
