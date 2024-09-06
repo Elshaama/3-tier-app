@@ -5,8 +5,7 @@ pipeline {
         DOCKER_CREDENTIALS_ID = 'docker-credentials' // Replace with your Docker credentials ID in Jenkins
         REPO_URL = 'https://github.com/Elshaama/3-tier-app.git' // Replace with your Git repository URL
         BRANCH = 'main' // Replace with your branch name
-        //DOCKER_HUB_REPO = 'elshaama'
-        DOCKER_REGISTRY_URL = 'https://hub.docker.com/u/elshaama' // Updated to include the protocol and URL path
+        DOCKER_HUB_REPO = 'elshaama'
     }
 
     stages {
@@ -36,15 +35,6 @@ pipeline {
                         }
                     }
                 }
-                stage('Build Database Image') {
-                    steps {
-                        script {
-                            dir('database-mysql') {
-                                sh 'docker-compose build'
-                            }
-                        }
-                    }
-                }
             }
         }
 
@@ -53,9 +43,9 @@ pipeline {
                 stage('Push Backend Image') {
                     steps {
                         script {
-                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_REGISTRY_URL}"]) {
-                                sh 'docker tag backend-image:latest ${env.DOCKER_REGISTRY_URL}/elshaama/backend-image:latest'
-                                sh 'docker push ${env.DOCKER_REGISTRY_URL}/elshaama/backend-image:latest'
+                                withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
+                                sh 'docker tag backend-image:latest ${env.DOCKER_HUB_REPO}/backend-image:latest'
+                                sh 'docker push ${env.DOCKER_HUB_REPO}/backend-image:latest'
                             }
                         }
                     }
