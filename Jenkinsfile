@@ -43,7 +43,7 @@ pipeline {
                 stage('Push Backend Image') {
                     steps {
                         script {
-                                withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
+                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
                                 sh 'docker tag backend-image:latest ${env.DOCKER_HUB_REPO}/backend-image:latest'
                                 sh 'docker push ${env.DOCKER_HUB_REPO}/backend-image:latest'
                             }
@@ -53,9 +53,9 @@ pipeline {
                 stage('Push Frontend Image') {
                     steps {
                         script {
-                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_REGISTRY_URL}"]) {
-                                sh 'docker tag frontend-image:latest ${env.DOCKER_REGISTRY_URL}/elshaama/frontend-image:latest'
-                                sh 'docker push ${env.DOCKER_REGISTRY_URL}/elshaama/frontend-image:latest'
+                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
+                                sh 'docker tag frontend-image:latest ${env.DOCKER_HUB_REPO}/frontend-image:latest'
+                                sh 'docker push ${env.DOCKER_HUB_REPO}/frontend-image:latest'
                             }
                         }
                     }
@@ -63,9 +63,9 @@ pipeline {
                 stage('Push Database Image') {
                     steps {
                         script {
-                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_REGISTRY_URL}"]) {
-                                sh 'docker tag database-image:latest ${env.DOCKER_REGISTRY_URL}/elshaama/database-image:latest'
-                                sh 'docker push ${env.DOCKER_REGISTRY_URL}/elshaama/database-image:latest'
+                            withDockerRegistry([credentialsId: "${env.DOCKER_CREDENTIALS_ID}"]) {
+                                sh 'docker tag database-image:latest ${env.DOCKER_HUB_REPO}/database-image:latest'
+                                sh 'docker push ${env.DOCKER_HUB_REPO}/database-image:latest'
                             }
                         }
                     }
