@@ -30,7 +30,7 @@ pipeline {
                     steps {
                         script {
                             dir('frontend-html') {
-                            sh 'docker build -t frontend-image:latest -f .'
+                            sh 'docker build -t frontend-image:latest .'
                             }   
                         }
                     }
