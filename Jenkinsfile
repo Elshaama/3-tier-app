@@ -20,24 +20,18 @@ pipeline {
                 stage('Build Backend Image') {
                     steps {
                         script {
-                            sh 'docker build -t backend-image:latest -f Dockerfile-backend .'
+                            sh 'docker build -t backend-image:latest -f /backend-flask .'
                         }
                     }
                 }
                 stage('Build Frontend Image') {
                     steps {
                         script {
-                            sh 'docker build -t frontend-image:latest -f Dockerfile-frontend .'
+                            sh 'docker build -t frontend-image:latest -f /frontend-html .'
                         }
                     }
                 }
-                stage('Build Database Image') {
-                    steps {
-                        script {
-                            sh 'docker build -t database-image:latest -f Dockerfile-database .'
-                        }
-                    }
-                }
+                
             }
         }
 
